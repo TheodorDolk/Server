@@ -4,6 +4,7 @@ import threading
 HEADER = 64
 PORT = 5050
 SERVER = socket.gethostbyname(socket.gethostname())
+print(SERVER)
 ADDR = (SERVER, PORT)
 FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
@@ -18,11 +19,12 @@ def handle_client(conn, addr):
     connected = True
     while connected:
         msg_length = conn.recv(HEADER).decode(FORMAT)
-        msg_length = int(msg_length)
-        msg = conn.recv(msg_length).decode(FORMAT)
-        if msg == DISCONNECT_MESSAGE:
-            connected = False
-        print(f"[{addr}] {msg}")
+        if msg_length:
+            msg_length = int(msg_length)
+            msg = conn.recv(msg_length).decode(FORMAT)
+            if msg == DISCONNECT_MESSAGE:
+                connected = False
+            print(f"[{addr}] {msg}")
     conn.close()
 
 
@@ -37,6 +39,6 @@ def start():
     pass
 
 
-print("[SERVING IS STARTING]...")
+print("1[SERVING IS STARTING]...")
 
 start()
