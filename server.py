@@ -21,12 +21,19 @@ def handle_client(conn, addr):
         msg_length = conn.recv(HEADER).decode(FORMAT)
         if msg_length:
             msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
+            # FIX SO CLIENT ALIAS IS SHOWING
+            raw_msg = conn.recv(msg_length).decode(FORMAT)
+            client_alias = raw_msg.split(" ")[0]
+            alias_len = len(client_alias) + 1
+            msg = raw_msg[alias_len:]
             if msg == DISCONNECT_MESSAGE:
-                connected = False
-            print(f"[{addr}]: {msg}")
-            conn.send("MSG Received".encode(FORMAT))
+                print(f"[{client_alias}] DISCONNECTED")
+                break
+            print(f"[{client_alias}]: {msg}")
+            server_answer = input("[SERVER]: ")
+            conn.send(server_answer.encode(FORMAT))
     conn.close()
+    print(f"[ACTIVE CONNECTIONS] {threading.active_count() - 2}")
 
 
 def start():
