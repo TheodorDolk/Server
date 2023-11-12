@@ -24,7 +24,8 @@ def handle_client(conn, addr):
             msg = conn.recv(msg_length).decode(FORMAT)
             if msg == DISCONNECT_MESSAGE:
                 connected = False
-            print(f"[{addr}] {msg}")
+            print(f"[{addr}]: {msg}")
+            conn.send("MSG Received".encode(FORMAT))
     conn.close()
 
 
@@ -39,6 +40,6 @@ def start():
     pass
 
 
-print("1[SERVING IS STARTING]...")
+print("[SERVING IS STARTING]...")
 
 start()
